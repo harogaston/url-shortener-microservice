@@ -1,10 +1,19 @@
-const express = require('express')
-const path = require('path')
-const PORT = process.env.PORT || 5000
+const express = require('express');
+const path = require('path');
+const PORT = process.env.PORT || 5000;
+var http = require('http');
+var main = require('main');
 
-express()
+var app = express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+  .use('/', main);
+
+app.set('port', PORT);
+
+var server = http.createServer(app);
+
+server.listen(PORT);
+
+module.exports(app);
